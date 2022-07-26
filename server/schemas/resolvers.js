@@ -32,7 +32,6 @@ const resolvers = {
                 const userData = await User.findOne({_id: context.user._id})
                 .select('-__v -password')
                 .populate('savedBooks')
-                .populate('bookCount');
 
                 return userData
             }
