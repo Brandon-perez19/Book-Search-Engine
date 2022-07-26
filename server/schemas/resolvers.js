@@ -1,20 +1,16 @@
 // import user model
-const { User, Book } = require('../models');
+const { User} = require('../models');
 // import sign token function from auth
 const { signToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express')
 
 const resolvers = {
     Query: {
-        books: async () => {
-            return Book.find().sort({ createdAt: -1 })
-        },
         //get all users
         users: async () => {
             return User.find()
                 .select('-__v -password')
                 .populate('savedBooks')
-                .populate('bookCount');
         },
         // get a single user by either their id or their username
         user: async (parents, { user = null, params }) => {
@@ -23,7 +19,6 @@ const resolvers = {
             })
                 .select('-__v -password')
                 .populate('savedBooks')
-                .populate('bookCount');
 
             if (!foundUser) {
                 throw new AuthenticationError('Cannot find a user with this id!');
@@ -59,7 +54,7 @@ const resolvers = {
         },
         // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
         // {body} is destructured req.body
-        login: async (parent, { username, password }) => {
+        login: async (parent, {username, email, password }) => {
             const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
             if (!user) {
                 throw new AuthenticationError({ message: "Can't find this user" });
