@@ -1,15 +1,13 @@
-const bookSchema = require("../models/Book");
 // import user model
-const { User } = require('../models');
+const { User, Book } = require('../models');
 // import sign token function from auth
 const { signToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express')
 
-
 const resolvers = {
     Query: {
         books: async () => {
-            return bookSchema.find().sort({ createdAt: -1 })
+            return Book.find().sort({ createdAt: -1 })
         },
         //get all users
         users: async () => {
@@ -107,3 +105,5 @@ const resolvers = {
         }
     }
 }
+
+module.exports = resolvers
