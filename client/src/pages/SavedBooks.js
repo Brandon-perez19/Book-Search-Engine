@@ -11,6 +11,7 @@ const SavedBooks = () => {
   //if userData is set to an empty string, then data populates
   var userData = '';
   const [deleteBook] = useMutation(DELETE_BOOK)
+
   const { data } = useQuery(GET_ME)
 
   try {
@@ -37,8 +38,8 @@ const SavedBooks = () => {
     }
 
     try {
-      const {data} = await deleteBook({
-        variables: {bookId} 
+      const { data } = await deleteBook({
+        variables: { bookId }
       });
 
       console.log(data)

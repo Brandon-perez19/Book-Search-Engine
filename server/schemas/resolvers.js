@@ -28,7 +28,6 @@ const resolvers = {
         },
 
         me: async (parent, args, context) => {
-            console.log("I've been called")
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
@@ -87,19 +86,17 @@ const resolvers = {
         },
         // remove a book from `savedBooks`
         deleteBook: async (parent, body, context) => {
-            console.log(body)
             const updatedUser = await User.findOneAndUpdate(
                 { _id: context.user._id },
                 { $pull: { savedBooks: { bookId: body.bookId } } },
                 { new: true }
             );
-            
-            return updatedUser;
 
             if (!updatedUser) {
                 throw new AuthenticationError("Couldn't find user with this id!");
             }
             
+            return updatedUser;
         }
     }
 }
