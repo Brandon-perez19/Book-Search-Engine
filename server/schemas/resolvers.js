@@ -42,6 +42,7 @@ const resolvers = {
     Mutation: {
         // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
         createUser: async (parent, args) => {
+            console.log('Ive been called', args)
             const user = await User.create(args);
 
             if (!user) {
@@ -53,8 +54,8 @@ const resolvers = {
         },
         // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
         // {body} is destructured req.body
-        login: async (parent, {username, email, password }) => {
-            const user = await User.findOne({ $or: [{ username: username }, { email: email }] });
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
             if (!user) {
                 throw new AuthenticationError({ message: "Can't find this user" });
             }
