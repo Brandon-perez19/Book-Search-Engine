@@ -29,17 +29,14 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
+    //use try/catch instead of promises to handle errors
     try {
-      const {response} = await createUser({
-        variables: {userFormData}});
-      console.log(response)
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
+      //execute createUser mutations and pass in variable data from form
+      const { data } = await createUser({
+        variables: {...userFormData}
+      });
+      
+      Auth.login(data.createUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
